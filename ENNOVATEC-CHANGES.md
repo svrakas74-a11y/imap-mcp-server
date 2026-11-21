@@ -21,8 +21,9 @@ Each change is also its own branch and its own upstream pull request, so the aut
 | 2 | `IMAP_MCP_MOVE_LOG`: CSV log of every move, optional `reason` field. New file is owner-only, header created atomically | `feat/move-log` | `src/utils/move-log.ts`, `src/tools/email-tools.ts`, `src/services/imap-service.ts` (`fetchEnvelopesForUids`) |
 | 3 | Read-only tool `imap_get_dmarc_report` with size, entry-count, per-call and output limits | `feat/dmarc-report` | `src/utils/dmarc.ts`, `src/tools/dmarc-tools.ts`, `src/tools/index.ts`, `src/services/imap-service.ts` (`getAllAttachments`) |
 | 4 | Run from this local build on both PCs instead of `npx imap-mcp-server@2.2.0` | (config only) | `%APPDATA%\Claude\claude_desktop_config.json` |
+| 5 | Tool `imap_save_reply_draft` (2026-11-20, Stavros's request): reply drafts, never sent, quoted like Outlook Reply All and built on the server (header block, the original's formatted HTML + head styles, inline images re-attached by Content-ID), so long threads keep their formatting | `feat/reply-draft-quote` (no PR yet) | `src/utils/reply-quote.ts`, `src/services/imap-service.ts` (`getReplyQuoteSource`), `src/tools/email-tools.ts` |
 
-Tests: `tests/email-tools-move-allowlist.test.ts`, `tests/email-tools-move-log.test.ts`, `tests/dmarc.test.ts`.
+Tests: `tests/email-tools-move-allowlist.test.ts`, `tests/email-tools-move-log.test.ts`, `tests/dmarc.test.ts`, `tests/reply-quote.test.ts`.
 README and CHANGELOG are updated in each branch.
 
 ## Claude desktop config (titan-imap entry)
@@ -32,7 +33,7 @@ README and CHANGELOG are updated in each branch.
   "command": "C:\\Program Files\\nodejs\\node.exe",
   "args": ["C:\\Users\\svrak\\imap-mcp-server\\dist\\index.js"],
   "env": {
-    "IMAP_MCP_ENABLED_TOOLS": "<read tools>,imap_save_draft,imap_move_email,imap_get_dmarc_report",
+    "IMAP_MCP_ENABLED_TOOLS": "<read tools>,imap_save_draft,imap_save_reply_draft,imap_move_email,imap_get_dmarc_report",
     "IMAP_MCP_MOVE_ALLOWED_FOLDERS": "Trash,INBOX",
     "IMAP_MCP_MOVE_LOG": "C:\\Users\\svrak\\Qsync\\Personal\\Personal Backup Dirs\\ennovatec\\Governance\\Email\\mailbox-moves.csv"
   }
