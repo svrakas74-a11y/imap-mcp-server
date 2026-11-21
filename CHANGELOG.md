@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - `IMAP_MCP_MOVE_ALLOWED_FOLDERS`: optional allowlist of destination folders for `imap_move_email`. Other targets are refused before any IMAP call, including folder creation, so an unattended agent can be limited to, say, `Trash`. Names are matched exactly (INBOX case-insensitively, per RFC 3501). No tool was renamed and no input or output shape changed. Tests in `tests/email-tools-move-allowlist.test.ts`.
+- `IMAP_MCP_MOVE_LOG`: optional CSV audit log of `imap_move_email` (one row per message: sender, subject, date, Message-ID, old/new UID, status, and a new optional `reason` input). A new file is created owner-only (0600), and its header atomically via a hard link, so concurrent writers produce one header. Rows are serialized within a process. Formula-like cells are neutralized. A failed write is reported as `logWarning` and never fails the move. `logged`/`logWarning` appear only when the variable is set. No tool was renamed and no existing shape changed. Tests in `tests/email-tools-move-log.test.ts`.
+- `ImapService.fetchEnvelopesForUids()` (decoded sender/subject/date/Message-ID for given UIDs).
 
 ## [2.2.0] - 2026-10-09
 
